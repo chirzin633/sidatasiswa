@@ -202,5 +202,6 @@ sketch
 # Ignore all local history of files
 .history
 .ionide
+PRD.md
 
 # End of https://www.toptal.com/developers/gitignore/api/composer,node,react,laravel,visualstudiocode
