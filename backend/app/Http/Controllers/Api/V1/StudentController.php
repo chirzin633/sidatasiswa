@@ -39,7 +39,7 @@ class StudentController extends Controller
             'nis' => ['required', 'string', 'unique:students,nis'],
             'name' => ['required', 'string', 'min:3'],
             'class' => ['required', 'string'],
-            'gender' => ['required, in:L,P'],
+            'gender' => ['required', 'in:L,P'],
             'birth_date' => ['required', 'date'],
             'address' => ['nullable', 'string']
         ]);
@@ -90,7 +90,7 @@ class StudentController extends Controller
             'nis' => ['required', 'string', Rule::unique('students', 'nis')->ignore($student)],
             'name' => ['required', 'string', 'min:3'],
             'class' => ['required', 'string'],
-            'gender' => ['required, in:L,P'],
+            'gender' => ['required', 'in:L,P'],
             'birth_date' => ['required', 'date'],
             'address' => ['nullable', 'string']
         ]);
