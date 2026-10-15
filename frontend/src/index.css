@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+@theme {
+  --color-bg-page: #f4e869;
+  --color-surface: #ffffff;
+  --color-border-ink: #000000;
+  --color-accent-pink: #ff90e8;
+  --color-accent-green: #b2ff05;
+  --color-accent-blue: #3b82f6;
+  --color-error: #ff6b6b;
+  --color-error-text: #ff3b3b;
+
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-brutal: 8px 8px 0px #000;
+  --shadow-brutal-sm: 6px 6px 0px #000;
+  --shadow-brutal-press: 3px 3px 0px #000;
+  --shadow-brutal-error: 4px 4px 0px #000;
+}
