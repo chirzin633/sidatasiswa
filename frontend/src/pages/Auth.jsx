@@ -129,10 +129,20 @@ export default function Auth() {
           <div
             className={`absolute top-0 left-0 w-1/2 h-full bg-accent-pink z-1 transition-all duration-300 ease-in-out ${isSignup ? "left-1/2 border-l-[3px] border-border-ink" : "border-r-[3px] border-border-ink"} `}
           />
-          <button type="button" onClick={() => switchTab(false)} aria-selected={!isSignup} className="z-10 flex flex-1 justify-center items-center text-border-ink font-bold text-sm uppercase cursor-pointer select-none">
+          <button
+            type="button"
+            onClick={() => switchTab(false)}
+            aria-selected={!isSignup}
+            className="z-10 flex flex-1 justify-center items-center text-border-ink font-bold text-sm uppercase cursor-pointer select-none"
+          >
             Login
           </button>
-          <button type="button" onClick={() => switchTab(true)} aria-selected={isSignup} className="z-10 flex flex-1 justify-center items-center text-border-ink font-bold text-sm uppercase cursor-pointer select-none">
+          <button
+            type="button"
+            onClick={() => switchTab(true)}
+            aria-selected={isSignup}
+            className="z-10 flex flex-1 justify-center items-center text-border-ink font-bold text-sm uppercase cursor-pointer select-none"
+          >
             Signup
           </button>
         </div>
@@ -207,7 +217,7 @@ export default function Auth() {
                   value: signupName,
                   setter: setSignupName,
                   type: "text",
-                  ph: "Chirzin",
+                  ph: "Nama Lengkap",
                   field: "name",
                   ac: "name",
                 },
@@ -216,7 +226,7 @@ export default function Auth() {
                   value: signupEmail,
                   setter: setSignupEmail,
                   type: "email",
-                  ph: "chirzin@mail.com",
+                  ph: "email@mail.com",
                   field: "email",
                   ac: "email",
                 },
@@ -240,7 +250,10 @@ export default function Auth() {
                 },
               ].map((f) => (
                 <div className="mb-4" key={f.field}>
-                  <label htmlFor={`signup-${f.field}`} className="block mb-1.5 text-border-ink font-bold text-[13px] uppercase">
+                  <label
+                    htmlFor={`signup-${f.field}`}
+                    className="block mb-1.5 text-border-ink font-bold text-[13px] uppercase"
+                  >
                     {f.label}
                   </label>
                   <input
