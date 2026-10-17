@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { AuthProvider, useAuth } from "./context/AuthContect";
 import Auth from "./pages/Auth";
+import Dasboard from "./pages/Dashboard";
 
 export default function App() {
   return (
@@ -16,7 +17,7 @@ function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
-    return <div className="p-10">Loading....</div>;
+    return <div className="p-10 font-sans font-bold">Loading....</div>;
   }
 
   if (!isAuthenticated) {
@@ -30,7 +31,7 @@ function PublicRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
-    return <div className="p-10">Loading....</div>;
+    return <div className="p-10 font-sans font-bold">Loading....</div>;
   }
 
   if (isAuthenticated) {
@@ -65,7 +66,7 @@ function AppRoutes() {
         path="/dashboard"
         element={
           <ProtectedRoute>
-            <div className="p-10">Dashboard</div>
+            <Dasboard />
           </ProtectedRoute>
         }
       />
