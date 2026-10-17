@@ -4,6 +4,21 @@ import { useEffect, useMemo, useState } from "react";
 import api from "../services/api";
 import AppLayout from "../components/layout/AppLayout";
 
+function StatCard({ label, value, bg, loading }) {
+  return (
+    <div
+      className={`${bg} border-[3px] border-border-ink rounded p-5 shadow-brutal`}
+    >
+      <p className="mb-2 text-border-ink/70 font-black text-[11px] uppercase tracking-wide">
+        {label}
+      </p>
+      <p className="text-border-ink font-black text-4xl leading-none">
+        {loading ? "-" : value}
+      </p>
+    </div>
+  );
+}
+
 export default function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -13,7 +28,7 @@ export default function Dashboard() {
   useEffect(() => {
     async function fetchStudents() {
       try {
-        const res = await api.get("/students?per_page=100");
+        const res = await api.get("/students?per_page=50");
         setStudents(res.data.data.data || []);
       } catch (error) {
         console.error("Gagal ambil data siswa");
@@ -21,7 +36,7 @@ export default function Dashboard() {
         setLoading(false);
       }
     }
-    fetchStudents;
+    fetchStudents();
   }, []);
 
   // Hitung statistik
@@ -52,19 +67,6 @@ export default function Dashboard() {
       .slice(0, 5);
   }, [students]);
 
-  const StatCard = ({ label, value, bg }) => (
-    <div
-      className={`${bg} border-[3px] border-border-ink rounded p-5 shadow-brutal`}
-    >
-      <p className="mb-2 text-border-ink/70 font-black text-[11px] uppercase tracking-wide">
-        {label}
-      </p>
-      <p className="text-border-ink font-black text-4xl leading-none">
-        {loading ? "-" : value}
-      </p>
-    </div>
-  );
-
   return (
     <AppLayout title="Dashboard">
       {/* {Welcome} */}
@@ -81,24 +83,28 @@ export default function Dashboard() {
       {/* Stat Cards */}
       <div className="gap-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-8">
         <StatCard
+          loading={loading}
           label={"Total Siswa"}
           value={stats.total}
           bg={"bg-accent-pink"}
         />
 
         <StatCard
+          loading={loading}
           label={"Laki-laki"}
           value={stats.male}
           bg={"bg-accent-blue text-white"}
         />
 
         <StatCard
+          loading={loading}
           label={"Perempuan"}
           value={stats.female}
           bg={"bg-accent-green"}
         />
 
         <StatCard
+          loading={loading}
           label={"Jumlah Kelas"}
           value={stats.classCount}
           bg={"bg-surface"}
@@ -114,7 +120,7 @@ export default function Dashboard() {
           </h3>
           {loading ? (
             <p className="font-bold text-gray-500 text-sm">Memuat data...</p>
-          ) : classDistribution / length === 0 ? (
+          ) : classDistribution.length === 0 ? (
             <p className="font-bold text-gray-500 text-sm">
               Belum ada data siswa.
             </p>
@@ -156,7 +162,7 @@ export default function Dashboard() {
                   className="flex items-center gap-3 bg-bg-page px-3 py-2.5 border-[3px] border-border-ink rounded"
                 >
                   <div className="flex justify-center items-center border-[3px] border-border-ink rounded w-9 h-9 font-black text-sm bg-accent-green shrink-0">
-                    {s.name.chartAt(0).toUpperCase()}
+                    {s.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-border-ink font-bold text-sm truncate">
