@@ -3,7 +3,7 @@ export default function Pagination(props) {
 
   const pages = [];
   const range = 1;
-  for (let i; i <= lastPage; i++) {
+  for (let i = 1; i <= lastPage; i++) {
     if (
       i === 1 ||
       i === lastPage ||
@@ -21,6 +21,8 @@ export default function Pagination(props) {
   return (
     <div className="flex flex-wrap items-center gap-2">
       <button
+        onClick={() => onChange(current - 1)}
+        disabled={current <= 1}
         className={`${btnBase} bg-surface shadow-brutal-press cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:not-disabled:bg-accent-green`}
       >
         ‹
@@ -38,7 +40,7 @@ export default function Pagination(props) {
           <button
             key={page}
             onClick={() => onChange(page)}
-            className={`${btnBase} ${p === current ? "bg-accent-pink shadow-brutal-press translate-x-0.75  translate-y-0.75" : "bg-surface shadow-brutal-sm hover:bg-accent-green hover:shadow-brutal-press hover:translate-x-0.75 hover: translate-y-0.75"} cursor-pointer`}
+            className={`${btnBase} ${page === current ? "bg-accent-pink shadow-brutal-press translate-x-0.75  translate-y-0.75" : "bg-surface shadow-brutal-sm hover:bg-accent-green hover:shadow-brutal-press hover:translate-x-0.75 hover: translate-y-0.75"} cursor-pointer`}
           >
             {page}
           </button>

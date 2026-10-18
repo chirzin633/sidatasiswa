@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { AuthProvider, useAuth } from "./context/AuthContect";
 import Auth from "./pages/Auth";
 import Dasboard from "./pages/Dashboard";
+import Students from "./pages/Students";
 
 export default function App() {
   return (
@@ -67,6 +68,15 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <Dasboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/students"
+        element={
+          <ProtectedRoute>
+            <Students />
           </ProtectedRoute>
         }
       />

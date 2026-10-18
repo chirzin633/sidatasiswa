@@ -24,7 +24,18 @@ class StudentController extends Controller
 
         $perPage = (int) $request->query('per_page', 10);
         $perPage = in_array($perPage, [5, 10, 15, 25, 50]) ? $perPage : 10;
-        $students = $query->orderBy('created_at', 'desc')->paginate($perPage);
+        $sortBy = $request->query('sort_by', 'created_at');
+        $sortDir = $request->query('sort_dir', 'desc');
+
+        $allowedSorts = ['created_at', 'name', 'nis', 'class', 'birth_date'];
+
+        if (!in_array($sortBy, $allowedSorts)) {
+            $sortBy = 'created_at';
+        }
+
+        $sortDir = in_array(strtolower($sortDir), ['asc', 'desc']) ? $sortDir : 'desc';
+
+        $students = $query->orderBy($sortBy, $sortDir)->paginate($perPage);
 
         return response()->json([
             'success' => true,
