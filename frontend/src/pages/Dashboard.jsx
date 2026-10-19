@@ -125,7 +125,7 @@ export default function Dashboard() {
               Belum ada data siswa.
             </p>
           ) : (
-            <ul>
+            <ul className="space-y-2">
               {classDistribution.map((c) => (
                 <li
                   key={c.name}
@@ -155,7 +155,7 @@ export default function Dashboard() {
               Belum ada data siswa.
             </p>
           ) : (
-            <ul className="space-y-3">
+            <ul className="space-y-2">
               {recentStudents.map((s) => (
                 <li
                   key={s.id}

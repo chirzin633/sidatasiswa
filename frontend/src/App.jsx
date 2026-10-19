@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from "./context/AuthContect";
 import Auth from "./pages/Auth";
 import Dasboard from "./pages/Dashboard";
 import Students from "./pages/Students";
+import StudentCreate from "./pages/StudentCreate";
 
 export default function App() {
   return (
@@ -80,6 +81,16 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/students/create"
+        element={
+          <ProtectedRoute>
+            <StudentCreate />
+          </ProtectedRoute>
+        }
+      />
+
       <Route path="/" element={<Navigate to={"/dashboard"} replace />} />
       <Route path="*" element={<Navigate to={"/login"} replace />} />
     </Routes>
