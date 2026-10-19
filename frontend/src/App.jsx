@@ -5,6 +5,7 @@ import Dasboard from "./pages/Dashboard";
 import Students from "./pages/Students";
 import StudentCreate from "./pages/StudentCreate";
 import StudentEdit from "./pages/StudentEdit";
+import StudentDetail from "./pages/StudentDetail";
 
 export default function App() {
   return (
@@ -88,6 +89,15 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <StudentCreate />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/students/:id"
+        element={
+          <ProtectedRoute>
+            <StudentDetail />
           </ProtectedRoute>
         }
       />

@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 export default function StudentRow(props) {
   const { student, onEdit, onDelete } = props;
 
@@ -7,7 +9,12 @@ export default function StudentRow(props) {
         {student.nis}
       </td>
       <td className="px-4 py-3 text-border-ink font-bold text-sm">
-        {student.name}
+        <Link
+          to={`/students/${student.id}`}
+          className="decoration-2 hover:underline underline-offset-2"
+        >
+          {student.name}
+        </Link>
       </td>
       <td className="px-4 py-3 text-border-ink font-bold text-sm whitespace-nowrap">
         {student.class}
