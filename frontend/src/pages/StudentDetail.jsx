@@ -17,6 +17,11 @@ export default function StudentDetail() {
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
+    setStudent(null);
+    setNotFound(false);
+    setError("");
+    setLoading(true);
+
     async function fetchStudent() {
       setLoading(true);
 
@@ -79,6 +84,16 @@ export default function StudentDetail() {
           >
             ← Kembali ke Daftar
           </button>
+        </div>
+      </AppLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <AppLayout title="Detail Siswa">
+        <div className="bg-error shadow-brutal-error p-10 border-[3px] border-border-ink rounded font-bold text-sm text-center">
+          {error}
         </div>
       </AppLayout>
     );

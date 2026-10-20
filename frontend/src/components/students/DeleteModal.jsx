@@ -1,5 +1,17 @@
+import { useEffect } from "react";
+
 export default function DeleteModal(props) {
   const { student, deleting, onCancel, onConfirm } = props;
+
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.key === "Escape" && !deleting) {
+        onCancel();
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [deleting, onCancel]);
 
   return (
     <div

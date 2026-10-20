@@ -24,7 +24,8 @@ export default function Students() {
 
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
-  const [toast, setToast] = useState("");
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState("success");
 
   // Debounce search 400ms
   useEffect(() => {
@@ -36,33 +37,45 @@ export default function Students() {
   }, [search]);
 
   // Fetch data
-  const fetchStudents = useCallback(async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const params = new URLSearchParams({
-        page: page,
-        per_page: perPage,
-        sort_by: sortBy,
-        sort_dir: sortDir,
-      });
+  const fetchStudents = useCallback(
+    async (signal) => {
+      setLoading(true);
+      setError("");
+      try {
+        const params = new URLSearchParams({
+          page: page,
+          per_page: perPage,
+          sort_by: sortBy,
+          sort_dir: sortDir,
+        });
 
-      if (debouncedSearch) {
-        params.append("search", debouncedSearch);
+        if (debouncedSearch) {
+          params.append("search", debouncedSearch);
+        }
+
+        const res = await api.get(`/students?${params.toString()}`, { signal });
+        setStudents(res.data.data.data || []);
+        setMeta(res.data.data);
+
+        return res;
+      } catch (error) {
+        if (error.name === "CanceledError" || error.code === "ERR_CANCELED") {
+          return;
+        }
+        console.error(error);
+        setError("Gagal memuat data siswa");
+        return null;
+      } finally {
+        setLoading(false);
       }
-
-      const res = await api.get(`/students?${params.toString()}`);
-      setStudents(res.data.data.data || []);
-      setMeta(res.data.data);
-    } catch (error) {
-      setError("Gagal memuat data siswa");
-    } finally {
-      setLoading(false);
-    }
-  }, [page, perPage, sortBy, sortDir, debouncedSearch]);
+    },
+    [page, perPage, sortBy, sortDir, debouncedSearch],
+  );
 
   useEffect(() => {
-    fetchStudents();
+    const controller = new AbortController();
+    fetchStudents(controller.signal);
+    return () => controller.abort();
   }, [fetchStudents]);
 
   // Toggle sort
@@ -84,11 +97,19 @@ export default function Students() {
     setDeleting(true);
     try {
       await api.delete(`/students/${deleteTarget.id}`);
-      setToast(`Siswa ${deleteTarget.name} berhasil dihapus`);
+      setToastMessage(`Siswa ${deleteTarget.name} berhasil dihapus`);
+      setToastType("success");
       setDeleteTarget(null);
-      fetchStudents();
+
+      if (students.length === 1 && page > 1) {
+        setPage(page - 1);
+      } else {
+        fetchStudents();
+      }
     } catch (error) {
-      setToast("Gagal menghapus siswa");
+      console.error(error);
+      setToastMessage("Gagal menghapus siswa");
+      setToastType("error");
     } finally {
       setDeleting(false);
       setTimeout(() => {
@@ -108,9 +129,11 @@ export default function Students() {
   return (
     <AppLayout title="Data Siswa">
       {/* Toast */}
-      {toast && (
-        <div className="top-0 right-6 z-50 fixed shadow-brutal px-5 py-3 border-[3px] border-t-border-ink rounded font-black text-sm uppercase bg-accent-green">
-          {toast}
+      {toastMessage && (
+        <div
+          className={`top-0 right-6 z-50 fixed shadow-brutal px5 py-3 border-[3px] border-border-ink rounded font-black text-sm uppercase ${toastType === "error" ? "bg-error text-white" : "bg-accent-green"}`}
+        >
+          {toastMessage}
         </div>
       )}
 

@@ -13,7 +13,7 @@ export default function StudentCreate() {
   async function handleSubmit(values) {
     setSubmitting(true);
     setError("");
-    setFieldErrors("");
+    setFieldErrors({});
 
     try {
       await api.post("/students", values);
@@ -22,9 +22,9 @@ export default function StudentCreate() {
       const res = error.response;
       if (res?.status === 422) {
         setFieldErrors(res.data.errors || {});
-        setError("Gagal menyimpan data siswa. Coba lagi.");
-      } else {
         setError("Validasi gagal. Periksa kembali input anda.");
+      } else {
+        setError("Gagal menyimpan data siswa. Coba lagi.");
       }
     } finally {
       setSubmitting(false);

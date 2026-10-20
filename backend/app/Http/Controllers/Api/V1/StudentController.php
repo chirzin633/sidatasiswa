@@ -27,7 +27,7 @@ class StudentController extends Controller
         $sortBy = $request->query('sort_by', 'created_at');
         $sortDir = $request->query('sort_dir', 'desc');
 
-        $allowedSorts = ['created_at', 'name', 'nis', 'class', 'birth_date'];
+        $allowedSorts = ['created_at', 'name', 'nis', 'class', 'birth_date', 'gender'];
 
         if (!in_array($sortBy, $allowedSorts)) {
             $sortBy = 'created_at';

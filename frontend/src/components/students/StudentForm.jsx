@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 const initialValues = {
@@ -23,6 +23,12 @@ export default function StudentForm(props) {
   const navigate = useNavigate();
   const [values, setValues] = useState(initialData || initialValues);
 
+  useEffect(() => {
+    if (initialData) {
+      setValues(initialData);
+    }
+  }, [initialData]);
+
   const handleChange = (field) => (e) => {
     setValues((prev) => ({ ...prev, [field]: e.target.value }));
   };
@@ -40,7 +46,7 @@ export default function StudentForm(props) {
   };
 
   const inputClass = (field) =>
-    `w-full px-4 py-3 bg-surface border-[3px] rounded font-sans font-bold text-sm text-border-ink outline-none transition-colors duration-100 ${fieldErrors[field] ? "border-error-text bg-red-50" : "border-border-ink focus:border-accent-blue"}`;
+    `w-full px-4 py-3 bg-surface border-[3px] rounded font-sans font-bold text-sm text-border-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue transition-colors duration-100 ${fieldErrors[field] ? "border-error-text bg-red-50" : "border-border-ink focus:border-accent-blue"}`;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">

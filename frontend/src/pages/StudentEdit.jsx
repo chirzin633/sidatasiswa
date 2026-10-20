@@ -17,6 +17,12 @@ export default function StudentEdit() {
   const [fieldErrors, setFieldErrors] = useState({});
 
   useEffect(() => {
+    setInitialData(null);
+    setNotFound(false);
+    setError("");
+    setFieldErrors({});
+    setLoading(true);
+
     async function fetchStudent() {
       try {
         const res = await api.get(`/students/${id}`);
