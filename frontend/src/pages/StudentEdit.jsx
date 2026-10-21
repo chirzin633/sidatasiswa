@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import api from "../services/api";
 import AppLayout from "../components/layout/AppLayout";
 import StudentForm from "../components/students/StudentForm";
+import { getApiMessage } from "../utils/apiMessage";
 
 export default function StudentEdit() {
   const { id } = useParams();
@@ -54,17 +55,21 @@ export default function StudentEdit() {
     setFieldErrors({});
 
     try {
-      await api.put(`/students/${id}`, values);
-      navigate("/students");
+      const res = await api.put(`/students/${id}`, values);
+      navigate("/students", {
+        state: { toast: getApiMessage(res, "Siswa berhasil diupdate.") },
+      });
     } catch (error) {
       const res = error.response;
       if (res?.status === 422) {
         setFieldErrors(res.data.errors || {});
-        setError("Validasi gagal. Periksa kembali input Anda.");
+        setError(
+          res.data.message || "Validasi gagal. Periksa kembali input Anda.",
+        );
       } else if (res?.status === 404) {
         setError("Data siswa tidak ditemukan");
       } else {
-        setError("Gagal menyimpan perubahan. Coba lagi.");
+        setError(res?.data?.message || "Gagal menyimpan perubahan. Coba lagi.");
       }
     } finally {
       setSubmitting(false);

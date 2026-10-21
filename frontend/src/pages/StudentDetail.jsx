@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import api from "../services/api";
 import AppLayout from "../components/layout/AppLayout";
 import DeleteModal from "../components/students/DeleteModal";
+import { getApiMessage } from "../utils/apiMessage";
 
 export default function StudentDetail() {
   const { id } = useParams();
@@ -44,10 +45,13 @@ export default function StudentDetail() {
   async function handleDelete() {
     setDeleting(true);
     try {
-      await api.delete(`/students/${id}`);
-      navigate("/students", { replace: true });
+      const res = await api.delete(`/students/${id}`);
+      navigate("/students", {
+        replace: true,
+        state: { toast: getApiMessage(res, "Siswa berhasil dihapus") },
+      });
     } catch (error) {
-      setError("Gagal menghapus siswa.");
+      setError(getApiMessage(error.response, "Gagal menghapus siswa."));
       setShowDelete(false);
     } finally {
       setDeleting(false);

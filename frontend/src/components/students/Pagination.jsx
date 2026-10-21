@@ -32,7 +32,7 @@ export default function Pagination(props) {
         page === "..." ? (
           <span
             key={`e${idx}`}
-            className="flex justify-center items-center min-w-9 font-black text-xs"
+            className="flex justify-center items-center min-w-9 h-9 font-black text-xs"
           >
             ...
           </span>
@@ -40,7 +40,7 @@ export default function Pagination(props) {
           <button
             key={page}
             onClick={() => onChange(page)}
-            className={`${btnBase} ${page === current ? "bg-accent-pink shadow-brutal-press translate-x-0.75  translate-y-0.75" : "bg-surface shadow-brutal-sm hover:bg-accent-green hover:shadow-brutal-press hover:translate-x-0.75 hover: translate-y-0.75"} cursor-pointer`}
+            className={`${btnBase} ${page === current ? "bg-accent-pink shadow-brutal-press" : "bg-surface shadow-brutal-sm hover:bg-accent-green hover:shadow-brutal-press hover:translate-x-0.75 hover: translate-y-0.75"} cursor-pointer`}
           >
             {page}
           </button>

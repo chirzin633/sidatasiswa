@@ -1,14 +1,16 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 import api from "../services/api";
 import AppLayout from "../components/layout/AppLayout";
 import SearchBar from "../components/students/SearchBar";
 import StudentTable from "../components/students/StudentTable";
 import Pagination from "../components/students/Pagination";
 import DeleteModal from "../components/students/DeleteModal";
+import { getApiMessage } from "../utils/apiMessage";
 
 export default function Students() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [students, setStudents] = useState([]);
   const [meta, setMeta] = useState(null);
@@ -26,6 +28,7 @@ export default function Students() {
   const [deleting, setDeleting] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState("success");
+  const toastTimerRef = useRef(null);
 
   // Debounce search 400ms
   useEffect(() => {
@@ -96,24 +99,30 @@ export default function Students() {
     }
     setDeleting(true);
     try {
-      await api.delete(`/students/${deleteTarget.id}`);
-      setToastMessage(`Siswa ${deleteTarget.name} berhasil dihapus`);
+      const response = await api.delete(`/students/${deleteTarget.id}`);
+      setToastMessage(
+        getApiMessage(response, `Siswa ${deleteTarget.name} berhasil dihapus`),
+      );
       setToastType("success");
       setDeleteTarget(null);
 
-      if (students.length === 1 && page > 1) {
+      const controller = new AbortController();
+      const res = await fetchStudents(controller.signal);
+
+      if (res && res.data.data.data.length === 0 && page > 1) {
         setPage(page - 1);
-      } else {
-        fetchStudents();
       }
     } catch (error) {
-      console.error(error);
-      setToastMessage("Gagal menghapus siswa");
+      setToastMessage(getApiMessage(error.response, "Gagal menghapus siswa"));
       setToastType("error");
     } finally {
       setDeleting(false);
-      setTimeout(() => {
-        setToast("");
+      if (toastTimerRef.current) {
+        clearTimeout(toastTimerRef.current);
+      }
+      toastTimerRef.current = setTimeout(() => {
+        setToastMessage("");
+        toastTimerRef.current = null;
       }, 3000);
     }
   }
@@ -126,12 +135,37 @@ export default function Students() {
     return `Menampilkan ${meta.from ?? 0}-${meta.to ?? 0} dari ${meta.total} siswa`;
   }, [meta]);
 
+  useEffect(() => {
+    if (location.state?.toast) {
+      setToastMessage(location.state.toast);
+      setToastType("success");
+      window.history.replaceState({}, document.title);
+
+      if (toastTimerRef.current) {
+        clearTimeout(toastTimerRef.current);
+      }
+
+      toastTimerRef.current = setTimeout(() => {
+        setToastMessage("");
+        toastTimerRef.current = null;
+      }, 3000);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) {
+        clearTimeout(toastTimerRef.current);
+      }
+    };
+  }, []);
+
   return (
     <AppLayout title="Data Siswa">
       {/* Toast */}
       {toastMessage && (
         <div
-          className={`top-0 right-6 z-50 fixed shadow-brutal px5 py-3 border-[3px] border-border-ink rounded font-black text-sm uppercase ${toastType === "error" ? "bg-error text-white" : "bg-accent-green"}`}
+          className={`top-2 right-6 z-50 fixed shadow-brutal px-5 py-3 border-[3px] border-border-ink rounded font-black text-sm uppercase ${toastType === "error" ? "bg-error text-white" : "bg-accent-green"}`}
         >
           {toastMessage}
         </div>

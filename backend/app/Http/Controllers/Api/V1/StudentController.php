@@ -109,7 +109,7 @@ class StudentController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Validator gagal',
+                'message' => 'Validasi gagal',
                 'errors' => $validator->errors()
             ], 422);
         }

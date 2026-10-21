@@ -26,6 +26,8 @@ export default function StudentForm(props) {
   useEffect(() => {
     if (initialData) {
       setValues(initialData);
+    } else {
+      setValues(initialValues);
     }
   }, [initialData]);
 
@@ -36,13 +38,6 @@ export default function StudentForm(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(values);
-  };
-
-  const FieldError = ({ field }) => {
-    const msg = fieldErrors[field]?.[0];
-    return msg ? (
-      <span className="block mt-1 font-bold text-error text-xs">{msg}</span>
-    ) : null;
   };
 
   const inputClass = (field) =>
@@ -71,7 +66,7 @@ export default function StudentForm(props) {
             placeholder="20240001"
             className={inputClass("nis")}
           />
-          <FieldError field={"nis"} />
+          <FieldError field={"nis"} fieldErrors={fieldErrors} />
         </div>
 
         {/* Nama */}
@@ -86,7 +81,7 @@ export default function StudentForm(props) {
             placeholder="Nama lengkap"
             className={inputClass("name")}
           />
-          <FieldError field={"name"} />
+          <FieldError field={"name"} fieldErrors={fieldErrors} />
         </div>
 
         {/* Kelas */}
@@ -101,7 +96,7 @@ export default function StudentForm(props) {
             placeholder="XII IPS 1"
             className={inputClass("class")}
           />
-          <FieldError field={"class"} />
+          <FieldError field={"class"} fieldErrors={fieldErrors} />
         </div>
 
         {/* Gender */}
@@ -134,7 +129,7 @@ export default function StudentForm(props) {
               </button>
             ))}
           </div>
-          <FieldError field={"gender"} />
+          <FieldError field={"gender"} fieldErrors={fieldErrors} />
         </div>
 
         {/* Tanggal Lahir */}
@@ -149,7 +144,7 @@ export default function StudentForm(props) {
             max={new Date().toISOString().split("T")[0]}
             className={inputClass("birth_date")}
           />
-          <FieldError field={"birth_date"} />
+          <FieldError field={"birth_date"} fieldErrors={fieldErrors} />
         </div>
 
         {/* Alamat */}
@@ -164,7 +159,7 @@ export default function StudentForm(props) {
             rows={3}
             className={`${inputClass("address")} resize-none`}
           />
-          <FieldError field={"address"} />
+          <FieldError field={"address"} fieldErrors={fieldErrors} />
         </div>
 
         {/* Actions */}
@@ -193,4 +188,11 @@ export default function StudentForm(props) {
       </div>
     </form>
   );
+}
+
+function FieldError({ field, fieldErrors }) {
+  const msg = fieldErrors[field]?.[0];
+  return msg ? (
+    <span className="block mt-1 font-bold text-error text-xs">{msg}</span>
+  ) : null;
 }

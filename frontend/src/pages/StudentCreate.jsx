@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import api from "../services/api";
 import AppLayout from "../components/layout/AppLayout";
 import StudentForm from "../components/students/StudentForm";
+import { getApiMessage } from "../utils/apiMessage";
 
 export default function StudentCreate() {
   const navigate = useNavigate();
@@ -16,15 +17,19 @@ export default function StudentCreate() {
     setFieldErrors({});
 
     try {
-      await api.post("/students", values);
-      navigate("/students");
+      const res = await api.post("/students", values);
+      navigate("/students", {
+        state: { toast: getApiMessage(res, "Siswa berhasil ditambahkan") },
+      });
     } catch (error) {
       const res = error.response;
       if (res?.status === 422) {
         setFieldErrors(res.data.errors || {});
-        setError("Validasi gagal. Periksa kembali input anda.");
+        setError(
+          getApiMessage(res, "Validasi gagal. Periksa kembali input anda."),
+        );
       } else {
-        setError("Gagal menyimpan data siswa. Coba lagi.");
+        setError(getApiMessage(res, "Gagal menyimpan data siswa. Coba lagi."));
       }
     } finally {
       setSubmitting(false);
