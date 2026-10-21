@@ -12,7 +12,7 @@ School student data management. A Laravel API serves student records to a React 
 
 ##### Dashboard
 
-![Dashboard](https://github.com/user-attachments/assets/fe9488a9-2d9f-4e36-8061-19441f58a78)
+![Dashboard](https://github.com/user-attachments/assets/1717c573-10ff-4398-a186-2b2feb1c360b)
 
 ##### Students
 
